@@ -1,12 +1,27 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import { defineConfig } from 'eslint/config';
+const js = require('@eslint/js');
+const globals = require('globals');
 
-export default defineConfig([
+module.exports = [
+  // On ignore quelques dossiers
   {
-    files: ['**/*.{js,mjs,cjs}'],
-    plugins: { js },
-    extends: ['js/recommended'],
-    languageOptions: { globals: globals.node },
+    ignores: ['node_modules/**', 'coverage/**'],
   },
-]);
+  // Config principale
+  {
+    files: ['src/**/*.js', 'tests/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'commonjs',
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+    },
+    rules: {
+      // Règles recommandées de base d'ESLint
+      ...js.configs.recommended.rules,
+      // Tu peux ajouter tes règles perso ici si besoin
+      // 'no-console': 'warn',
+    },
+  },
+];
