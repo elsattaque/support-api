@@ -45,7 +45,7 @@ Doivent être activées :
 4. Vérifier que les checks CI sont verts
 5. Cliquer sur **Merge Pull Request**
 
-📌 **Capture d’écran : liste des PR mergées (3 minimum)**
+![alt text](screenshots/pr.png)
 
 ---
 
@@ -55,9 +55,6 @@ Doivent être activées :
 
 ![alt text](screenshots/badge.png)
 
-```
-![CI](https://github.com/elsattaque/support-api/actions/workflows/ci.yml/badge.svg)
-```
 
 ## 2.2. Jobs configurés
 
