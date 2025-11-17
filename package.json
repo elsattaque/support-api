@@ -31,5 +31,14 @@
     "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
     "supertest": "^7.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageThreshold": {
+      "global": {
+        "statements": 70,
+        "lines": 70
+      }
+    }
   }
 }
