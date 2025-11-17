@@ -1,38 +1,174 @@
-## 1. Workflow Git
+# Support API – README (Version Courte)
 
-Ce projet utilise un workflow basé sur des branches de fonctionnalité et des Pull Requests :
+Ce fichier contient uniquement les informations **explicitement demandées** dans le sujet de l’évaluation.
+Les captures d’écran devront être ajoutées manuellement aux endroits indiqués.
 
-- La branche `main` est protégée (aucun push direct, merge uniquement via PR).
-- Pour chaque évolution, une branche de feature est créée depuis `main` :
-  - `git checkout -b feature/nom-de-la-feature`
-- Les changements sont committés avec des messages au format : `type: description`
-  - Exemples : `feat: add request types routes`, `test: add API tests`, `docs: update README`
-- Une Pull Request est ouverte vers `main` et doit passer tous les checks CI avant merge.
-- La branche de feature est supprimée après le merge.
+---
 
-Ce workflow permet :
-- de garder `main` toujours stable,
-- de valider les changements avant intégration,
-- d’avoir un historique de commits et de PR propre et lisible.
+# 1. Workflow Git (exigé)
 
-## 2. CI/CD
+## 1.1. Workflow utilisé
 
-Une pipeline GitHub Actions est configurée dans `.github/workflows/ci.yml`.
+Workflow GitHub Flow :
 
-Elle contient deux jobs principaux :
+1. Création d’une branche de fonctionnalité :
 
-- **code-quality**
-  - Installe les dépendances Node.js
-  - Vérifie la qualité du code avec ESLint (`npm run lint`)
-  - Vérifie le formatage avec Prettier (`npm run format:check`)
-  - Le job échoue si des erreurs de lint ou de formatage sont détectées
+   ```bash
+   git checkout -b feature/ma-feature
+   ```
+2. Commits réguliers
+3. Push de la branche :
 
-- **tests**
-  - Lance un service MongoDB dans le workflow
-  - Exécute la suite de tests Jest avec `npm test`
-  - Génère un rapport de couverture
-  - Le job échoue si les tests échouent ou si la couverture minimale configurée n’est pas atteinte
+   ```bash
+   git push -u origin feature/ma-feature
+   ```
+4. Ouverture d'une Pull Request
+5. Validation de la CI + merge vers `main`
+6. Suppression de la branche
 
-Ces deux jobs sont configurés comme **required checks** pour la branche `main`, ce qui signifie qu’une Pull Request ne peut pas être mergée tant que :
-- la qualité du code n’est pas valide,
-- tous les tests ne passent pas.
+## 1.2. Règles de protection de `main`
+
+Doivent être activées :
+
+* Require a pull request before merging
+* Require status checks to pass
+* Require branches to be up to date
+* Required checks : **code-quality** & **tests**
+
+![alt text](screenshots/image.png)
+
+## 1.3. Comment créer une PR
+
+1. Aller sur GitHub → "Compare & Pull Request"
+2. Choisir : base = `main`, compare = votre branche
+3. Ajouter un titre + description
+4. Vérifier que les checks CI sont verts
+5. Cliquer sur **Merge Pull Request**
+
+📌 **Capture d’écran : liste des PR mergées (3 minimum)**
+
+---
+
+# 2. CI/CD (exigé)
+
+## 2.1. Badge du statut CI/CD
+
+![alt text](screenshots/badge.png)
+
+```
+![CI](https://github.com/elsattaque/support-api/actions/workflows/ci.yml/badge.svg)
+```
+
+## 2.2. Jobs configurés
+
+### ✔ Job : code-quality
+
+* Lance ESLint (`npm run lint`)
+* Vérifie le formatage Prettier (`npm run format:check`)
+* Échec en cas d’erreur de style
+
+### ✔ Job : tests
+
+* Lance un service MongoDB
+* Exécute Jest + Supertest : `npm test`
+* Vérifie la couverture
+
+## 2.3. Required checks
+
+* `code-quality` : garantie qualité du code
+* `tests` : garantie non-régression
+
+
+---
+
+# 3. Installation et utilisation (exigé)
+
+## 3.1. Prérequis
+
+* Node.js 18+
+* MongoDB local ou distant
+
+## 3.2. Installation
+
+```bash
+git clone <repo>
+npm install
+```
+
+## 3.3. Variables d’environnement
+
+Créer `.env` :
+
+```
+MONGODB_URI=mongodb://localhost:27017/support-api
+PORT=3000
+```
+
+## 3.4. Commandes disponibles
+
+```
+npm start
+npm run seed
+npm run lint
+npm run format
+npm test
+```
+
+## 3.5. Exemples d’appels API
+
+### GET /health
+
+```json
+{ "status": "ok" }
+```
+
+### GET /api/request-types
+
+Retourne la liste des types actifs.
+
+### POST /api/request-types
+
+```json
+{
+  "code": "TECH_ISSUE",
+  "name": "Problème technique",
+  "description": "Bug",
+  "priority": "high",
+  "category": "Support",
+  "estimatedResponseTime": 4
+}
+```
+
+---
+
+# 4. Structure du projet (exigé)
+
+## 4.1. Arborescence
+
+```
+src/
+  config/database.js
+  models/RequestType.js
+  routes/requestTypes.js
+  server.js
+scripts/seed.js
+tests/requestTypes.test.js
+.github/workflows/ci.yml
+```
+
+## 4.2. Rôle des dossiers
+
+* **src/config** : connexion MongoDB
+* **src/models** : schémas Mongoose
+* **src/routes** : routes Express
+* **src/server.js** : serveur principal
+* **scripts** : scripts utilitaires (seed)
+* **tests** : tests Jest + Supertest
+* **.github/workflows** : CI/CD GitHub Actions
+
+
+---
+
+# Auteur
+
+Elsa Letellier – Projet « Git : au-delà du versioning »
