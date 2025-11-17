@@ -4,7 +4,9 @@ async function connectDB() {
   const uri = process.env.MONGODB_URI;
 
   if (!uri) {
-    console.error('❌ Erreur : MONGODB_URI non défini dans les variables d’environnement');
+    console.error(
+      '❌ Erreur : MONGODB_URI non défini dans les variables d’environnement',
+    );
     process.exit(1);
   }
 
